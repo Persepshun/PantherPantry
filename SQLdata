@@ -1,0 +1,147 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jun 18, 2024 at 07:47 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.1.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `pantherpantry`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventory`
+--
+
+Drop Database IF EXISTS pantherPantry;
+CREATE DATABASE IF NOT EXISTS pantherPantry;
+USE pantherPantry;
+
+CREATE TABLE `inventory` (
+  `dryFoods` int(4) NOT NULL,
+  `refrigerable` int(4) NOT NULL,
+  `toiletries` int(4) NOT NULL,
+  `oils` int(4) NOT NULL,
+  `reportDate` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `cunyID` int(8) NOT NULL,
+  `firstName` varchar(20) NOT NULL,
+  `lastName` varchar(20) NOT NULL,
+  `nonPerishable` int(2) DEFAULT NULL,
+  `perishable` int(2) DEFAULT NULL,
+  `toiletry` int(2) DEFAULT NULL,
+  `oil` int(2) DEFAULT NULL,
+  `semester` varchar(6) DEFAULT NULL,
+  `orderNo` int(15) NOT NULL,
+  `orderDate` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `students`
+--
+
+CREATE TABLE `students` (
+  `cunyID` int(8) NOT NULL,
+  `firstName` varchar(20) NOT NULL,
+  `lastName` varchar(20) NOT NULL,
+  `phoneNo` int(10) DEFAULT NULL,
+  `Email` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `survey`
+--
+
+CREATE TABLE `survey` (
+  `householdNo` int(2) NOT NULL,
+  `seniors` int(2) NOT NULL,
+  `children` int(2) NOT NULL,
+  `adults` int(2) NOT NULL,
+  `orderNo` int(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `inventory`
+--
+ALTER TABLE `inventory`
+  ADD PRIMARY KEY (`reportDate`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`orderNo`),
+  ADD KEY `RelOrderStudentCunyID` (`cunyID`);
+
+--
+-- Indexes for table `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`cunyID`);
+
+--
+-- Indexes for table `survey`
+--
+ALTER TABLE `survey`
+  ADD KEY `RelationOrderSurvey` (`orderNo`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `orderNo` int(15) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `RelOrderStudentCunyID` FOREIGN KEY (`cunyID`) REFERENCES `students` (`cunyID`);
+
+--
+-- Constraints for table `survey`
+--
+ALTER TABLE `survey`
+  ADD CONSTRAINT `RelationOrderSurvey` FOREIGN KEY (`orderNo`) REFERENCES `orders` (`orderNo`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
